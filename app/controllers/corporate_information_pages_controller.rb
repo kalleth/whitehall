@@ -1,5 +1,6 @@
 class CorporateInformationPagesController < DocumentsController
   prepend_before_action :find_organisation
+  before_action :redirect_worldwide_organisation_about_page, only: [:show]
   before_action :set_slimmer_headers_for_document, only: %i[show index]
 
   def show
@@ -38,6 +39,11 @@ private
   def find_document_or_edition_for_public
     published_edition = @organisation.corporate_information_pages.published.for_slug(params[:id])
     published_edition if published_edition.present? && published_edition.available_in_locale?(I18n.locale)
+  end
+
+  def redirect_worldwide_organisation_about_page
+    about_us_page = @document&.corporate_information_page_type == CorporateInformationPageType::AboutUs
+    redirect_to @organisation if @organisation.is_a?(WorldwideOrganisation) && about_us_page
   end
 
   def set_slimmer_headers_for_document

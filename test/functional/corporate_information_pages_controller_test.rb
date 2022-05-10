@@ -19,6 +19,16 @@ class CorporateInformationPagesControllerTest < ActionController::TestCase
       assert_select "p", "para1"
     end
   end
+  test "show redirects a worldwide organisation's about corporate information to the index" do
+    worldwide_organisation = create(:worldwide_organisation)
+    corporate_information_page = create(:about_corporate_information_page,
+                                        organisation: nil,
+                                        worldwide_organisation: worldwide_organisation)
+
+    get :show, params: { worldwide_organisation_id: worldwide_organisation, id: corporate_information_page.slug }
+    assert_response :redirect
+    assert_redirected_to worldwide_organisation_path(worldwide_organisation)
+  end
 
   view_test "should link to world location organisation belongs to" do
     world_location = create(:world_location)

@@ -87,11 +87,8 @@ private
 
     # About pages are actually shown on the CIP index for an Organisation.
     # We generate a unique path for them anyway, but this is always redirected.
-    case org
-    when Organisation
+    if org.is_a?(Organisation) || org.is_a?(WorldwideOrganisation)
       url.gsub("/about/about", "/about")
-    when WorldwideOrganisation
-      url.gsub("/about/about", "")
     end
   end
 
