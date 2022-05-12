@@ -6,6 +6,7 @@ REPOSITORY = 'whitehall'
 DEFAULT_SCHEMA_BRANCH = 'deployed-to-production'
 
 node {
+  govuk.setEnvar("JWT_AUTH_SECRET", "secret")
   govuk.setEnvar("PUBLISHING_E2E_TESTS_COMMAND", "test-whitehall")
   govuk.buildProject(
     publishingE2ETests: true,
