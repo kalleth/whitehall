@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Admin::AboutPagesControllerTest < ActionController::TestCase
+class Admin::TopicalEventAboutPagesControllerTest < ActionController::TestCase
   def setup
     login_as :user
     @topical_event = create(:topical_event)
@@ -19,7 +19,7 @@ class Admin::AboutPagesControllerTest < ActionController::TestCase
   end
 
   test "POST create saves a new about page" do
-    assert_difference "AboutPage.count" do
+    assert_difference "TopicalEventAboutPage.count" do
       post :create, params: { topical_event_id: @topical_event.to_param, about_page: attributes_for(:about_page) }
     end
     assert_not_nil @topical_event.about_page, "expected topical event to have an about page"

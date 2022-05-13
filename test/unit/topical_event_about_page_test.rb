@@ -1,6 +1,6 @@
 require "test_helper"
 
-class AboutPageTest < ActiveSupport::TestCase
+class TopicalEventAboutPageTest < ActiveSupport::TestCase
   test "should return search index data suitable for Rummageable" do
     event = create(:topical_event)
     page = create(:about_page, topical_event: event)

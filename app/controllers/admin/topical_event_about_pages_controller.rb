@@ -1,11 +1,11 @@
-class Admin::AboutPagesController < Admin::BaseController
+class Admin::TopicalEventAboutPagesController < Admin::BaseController
   before_action :find_topical_event
   before_action :find_page, except: %i[new create]
 
   helper_method :model_name, :human_friendly_model_name
 
   def new
-    @about_page = AboutPage.new
+    @about_page = TopicalEventAboutPage.new
   end
 
   def create
