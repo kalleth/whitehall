@@ -10,18 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_05_102300) do
-  create_table "about_pages", id: :integer, charset: "utf8mb3", collation: "utf8_unicode_ci", force: :cascade do |t|
-    t.integer "topical_event_id"
-    t.string "name"
-    t.text "summary"
-    t.text "body"
-    t.string "read_more_link_text"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.string "content_id"
-  end
-
+ActiveRecord::Schema[7.0].define(version: 2022_05_13_153429) do
   create_table "access_and_opening_times", id: :integer, charset: "utf8mb3", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.text "body"
     t.string "accessible_type"
@@ -482,8 +471,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_05_102300) do
     t.text "title"
     t.string "locale", null: false
     t.integer "featured_link_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["featured_link_id"], name: "index_on_featured_link"
     t.index ["locale"], name: "index_on_locale"
   end
@@ -816,8 +805,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_05_102300) do
     t.bigint "policy_group_id"
     t.string "dependable_type"
     t.bigint "dependable_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["dependable_id", "dependable_type", "policy_group_id"], name: "index_policy_group_dependencies_on_dependable_and_policy_group", unique: true
     t.index ["dependable_type", "dependable_id"], name: "index_policy_group_dependencies_on_dependable"
     t.index ["policy_group_id"], name: "index_policy_group_dependencies_on_policy_group_id"
@@ -1060,6 +1049,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_05_102300) do
     t.string "content_id"
     t.index ["ordering"], name: "index_take_part_pages_on_ordering"
     t.index ["slug"], name: "index_take_part_pages_on_slug", unique: true
+  end
+
+  create_table "topical_event_about_pages", id: :integer, charset: "utf8mb3", collation: "utf8_unicode_ci", force: :cascade do |t|
+    t.integer "topical_event_id"
+    t.string "name"
+    t.text "summary"
+    t.text "body"
+    t.string "read_more_link_text"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.string "content_id"
   end
 
   create_table "unpublishings", id: :integer, charset: "utf8mb3", collation: "utf8_unicode_ci", force: :cascade do |t|
