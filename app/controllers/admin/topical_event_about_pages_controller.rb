@@ -9,7 +9,7 @@ class Admin::TopicalEventAboutPagesController < Admin::BaseController
   end
 
   def create
-    @about_page = @topical_event.build_about_page(about_page_params)
+    @about_page = @topical_event.build_topical_event_about_page(about_page_params)
     if @about_page.save
       redirect_to admin_topical_event_about_pages_path, notice: "About page created"
     else
@@ -26,7 +26,7 @@ class Admin::TopicalEventAboutPagesController < Admin::BaseController
   end
 
   def show
-    @about_page = @topical_event.about_page
+    @about_page = @topical_event.topical_event_about_page
   end
 
   def model_name
@@ -44,10 +44,10 @@ private
   end
 
   def find_page
-    @about_page = @topical_event.about_page
+    @about_page = @topical_event.topical_event_about_page
   end
 
   def about_page_params
-    params.require(:about_page).permit(:body, :name, :summary, :read_more_link_text)
+    params.require(:topical_event_about_page).permit(:body, :name, :summary, :read_more_link_text)
   end
 end

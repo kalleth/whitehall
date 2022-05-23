@@ -137,7 +137,7 @@ Whitehall::Application.routes.draw do
       # pages however the route is needed to generate path and url
       # helper methods.
       # TODO: Remove when about page paths can be otherwise generated
-      resource :about_pages, path: "about", only: [:show]
+      resource :topical_event_about_pages, path: "about", only: [:show]
     end
 
     # TODO: Remove when paths can be generated without a routes entry
@@ -248,7 +248,7 @@ Whitehall::Application.routes.draw do
           resources :offsite_links
         end
         resources :topical_events, path: "topical-events" do
-          resource :about_pages, path: "about"
+          resource :topical_event_about_pages, path: "about"
           resources :classification_featurings, path: "featurings" do
             put :order, on: :collection
           end

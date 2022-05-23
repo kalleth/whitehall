@@ -20,20 +20,20 @@ class Admin::TopicalEventAboutPagesControllerTest < ActionController::TestCase
 
   test "POST create saves a new about page" do
     assert_difference "TopicalEventAboutPage.count" do
-      post :create, params: { topical_event_id: @topical_event.to_param, about_page: attributes_for(:about_page) }
+      post :create, params: { topical_event_id: @topical_event.to_param, topical_event_about_page: attributes_for(:topical_event_about_page) }
     end
-    assert_not_nil @topical_event.about_page, "expected topical event to have an about page"
+    assert_not_nil @topical_event.topical_event_about_page, "expected topical event to have an about page"
   end
 
   view_test "GET edit shows the form for editing an about page" do
-    about = create(:about_page, topical_event: @topical_event)
+    about = create(:topical_event_about_page, topical_event: @topical_event)
     get :edit, params: { topical_event_id: @topical_event.to_param }
     assert_select 'textarea[name*="summary"]', text: /#{about.summary}/
   end
 
   test "PUT update saves changes to the about page" do
-    about = create(:about_page, topical_event: @topical_event)
-    put :update, params: { topical_event_id: @topical_event.to_param, about_page: { name: "New name" } }
+    about = create(:topical_event_about_page, topical_event: @topical_event)
+    put :update, params: { topical_event_id: @topical_event.to_param, topical_event_about_page: { name: "New name" } }
     assert_equal "New name", about.reload.name
   end
 end
