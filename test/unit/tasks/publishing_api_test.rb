@@ -35,6 +35,9 @@ class PublishingApiRake < ActiveSupport::TestCase
     let(:task) { Rake::Task["publishing_api:publish_redirect_routes"] }
 
     test "publishes each redirect route" do
+      puts "printing out rails application secrets"
+      puts ENV['JWT_AUTH_SECRET']
+      puts "----------------"
       Timecop.freeze do
         RedirectRoute.all.each do |route|
           params = {
