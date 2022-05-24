@@ -36,7 +36,7 @@ class PublishingApiRake < ActiveSupport::TestCase
 
     test "publishes each redirect route" do
       puts "printing out rails application secrets"
-      puts ENV['JWT_AUTH_SECRET']
+      puts ENV["JWT_AUTH_SECRET"]
       puts "----------------"
       Timecop.freeze do
         RedirectRoute.all.each do |route|
