@@ -61,6 +61,8 @@ Whitehall::Application.configure do
 
   config.slimmer.asset_host = "http://tests-should-not-depend-on-external-host.com"
 
+  config.jwt_auth_secret = "123"
+
   # These environment variables are required for Plek. Conditionally setting
   # them here means we don't have to explicitly set them just to run tests.
   ENV["GOVUK_APP_DOMAIN"] ||= "test.gov.uk"
