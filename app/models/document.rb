@@ -106,6 +106,10 @@ class Document < ApplicationRecord
     published_edition.first_public_at if published?
   end
 
+  def first_published_on_govuk
+    edition_versions.where(state: "published").first.try(:created_at)
+  end
+
   def change_history
     DocumentHistory.new(self)
   end
@@ -124,6 +128,12 @@ class Document < ApplicationRecord
 
   def humanized_document_type
     document_type.underscore.tr("_", " ")
+  end
+
+  def edition_versions
+    Version.where(item_type: "Edition", item_id: editions.select(:id))
+           .includes(:item, :user)
+           .order(created_at: :asc, id: :asc)
   end
 
 private

@@ -64,11 +64,6 @@ module Edition::AuditTrail
     end
   end
 
-  def publication_audit_entry
-    version = document_versions.where(state: "published").first
-    VersionAuditEntry.new(0, version.item, version)
-  end
-
 private
 
   def edition_version_trail(edition_serial_number = 0, superseded: true)
