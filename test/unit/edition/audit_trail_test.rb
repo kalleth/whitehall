@@ -135,5 +135,30 @@ class Edition::AuditTrailTest < ActiveSupport::TestCase
 
     published_audit = new_edition.publication_audit_entry
     assert_equal publication_date, published_audit.created_at
+    assert_equal published_audit.first_edition?, true
+  end
+
+  def create_heavily_updated_document
+    edition = create(:draft_edition)
+    edition.major_change_published_at = Time.zone.now
+
+    10.times do |i|
+      4.times do |j|
+        edition.update! body: "publication #{i}, update #{j}",
+                        change_note: "made some changes"
+      end
+      edition.force_publish!
+
+      edition = edition.create_draft(edition.creator).reload
+    end
+
+    edition
+  end
+
+  test "#document_version_trail can " do
+    edition = create_heavily_updated_document
+    limited_version_trail = edition.document_version_trail(limit: 10)
+    assert_equal 10, limited_version_trail.count
+    assert_not limited_version_trail.first.first_edition?
   end
 end

@@ -56,3 +56,20 @@ if WorldLocation.where(name: "Test International Delegation").blank?
     world_location_type_id: 3,
   )
 end
+
+# Create a document with loads of history to recreate performance issues
+if NewsArticle.where(title: "A very historic document").blank?
+  n = NewsArticle.create!(
+    creator: User.find_by(name: "Test user"),
+    title: "A very historic document",
+    summary: "This document has lots of editions",
+    previously_published: false,
+    news_article_type_id: NewsArticleType::PressRelease.id,
+    lead_organisations: Organisation.where(name: "Test Organisation"),
+    body: "First version of the document",
+  )
+
+  10_000.times do |i|
+    n.update(body: "Version #{i} of the document")
+  end
+end

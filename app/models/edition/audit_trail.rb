@@ -55,15 +55,36 @@ module Edition::AuditTrail
     document_trail(superseded: superseded, remarks: true)
   end
 
-  def document_version_trail(superseded: true)
-    document_trail(superseded: superseded, versions: true)
+  def document_version_trail(superseded: true, limit: false)
+    scope = document_versions.reverse_order
+    scope = scope.where.not(state: "superseded") unless superseded
+    scope = scope.limit(limit) if limit
+
+    first_version = document_versions.first
+
+    scope.reverse.map do |version|
+      # Temporary bastardisation of the edition_serial_number to avoid refactoring first_edition? method and breaking EditorialRemarkAuditEntry
+      edition_serial_number = if version == first_version
+                                0
+                              else
+                                1
+                              end
+      VersionAuditEntry.new(edition_serial_number, version.item, version)
+    end
   end
 
   def publication_audit_entry
-    document_version_trail.detect { |audit_entry| audit_entry.version.state == "published" }
+    version = document_versions.where(state: "published").first
+    VersionAuditEntry.new(0, version.item, version)
   end
 
 private
+
+  def document_versions
+    Version.where(item_type: "Edition", item_id: document.editions.select(:id))
+           .includes(:item, :user)
+           .order(created_at: :asc, id: :asc)
+  end
 
   def record_create
     user = Edition::AuditTrail.whodunnit
@@ -90,7 +111,7 @@ private
       user.email == ENV["CO_NSS_WATCHKEEPER_EMAIL_ADDRESS"]
   end
 
-  def document_trail(superseded: true, versions: false, remarks: false)
+  def document_trail(superseded: true, limit: false, versions: false, remarks: false)
     scope = document.editions
 
     # Temporary fix to limit history on document:
@@ -102,6 +123,17 @@ private
 
     scope = scope.includes(versions: [:user]) if versions
     scope = scope.includes(editorial_remarks: [:author]) if remarks
+
+    if versions
+      scope = Version.where(item_type: "Edition", item_id: document.editions.select(:id))
+      scope = scope.where.not(state: "superseded") unless superseded
+
+      return scope.includes(:item, :user)
+                  .order("created_at desc, id desc")
+                  .limit(limit)
+                  .reverse
+                  .map.with_index { |version, i| VersionAuditEntry.new(i, version.item, version) }
+    end
 
     scope
       .includes(versions: [:user])
