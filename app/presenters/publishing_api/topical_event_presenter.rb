@@ -42,6 +42,7 @@ module PublishingApi
         details[:end_date] = item.end_date.rfc3339 if item.end_date
         details[:ordered_featured_documents] = ordered_featured_documents
         details[:social_media_links] = social_media_links
+        details[:emphasised_organisations] = emphasised_organisations
       end
     end
 
@@ -78,6 +79,10 @@ module PublishingApi
           title: social_media_account.display_name,
         }
       end
+    end
+
+    def emphasised_organisations
+      item.lead_organisations.map(&:content_id)
     end
   end
 end

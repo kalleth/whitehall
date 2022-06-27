@@ -74,6 +74,7 @@ class PublishingApi::TopicalEventPresenterTest < ActiveSupport::TestCase
             title: social_media_account.display_name,
           },
         ],
+        emphasised_organisations: [],
       },
     }
 
