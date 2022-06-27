@@ -30,6 +30,9 @@ node {
           govuk.runRakeTask("test:publishing_schemas --trace")
         } else {
           govuk.runRakeTask("ci:setup:minitest test --trace")
+          sh("date")
+          sh("bundle exec rake assets:precompile")
+          sh("date")
           sh("bundle exec cucumber")
           govuk.runRakeTask("jasmine")
         }
