@@ -6,6 +6,7 @@ module Attachable
              -> { not_deleted.order("attachments.ordering, attachments.id") },
              as: :attachable,
              inverse_of: :attachable
+
     has_many :html_attachments,
              -> { not_deleted.order("attachments.ordering, attachments.id") },
              as: :attachable
@@ -13,6 +14,11 @@ module Attachable
     has_many :deleted_html_attachments,
              -> { deleted },
              class_name: "HtmlAttachment",
+             as: :attachable
+
+    has_many :deleted_attachments,
+             -> { deleted },
+             class_name: "Attachment",
              as: :attachable
 
     if respond_to?(:add_trait)
@@ -58,6 +64,35 @@ module Attachable
 
   def attachables
     [self]
+  end
+
+  def has_attachment_changes?
+    has_created_attachments? || has_updated_attachments? || has_deleted_attachments?
+  end
+
+  def created_attachments
+    attachments.select { |attachment| attachment.created_at > (created_at + 5.seconds) }
+  end
+
+  def updated_attachments
+    updated_attachments = attachments.select do |attachment|
+      attachment.updated_at > attachment.created_at ||
+        (attachment.respond_to?(:govspeak_content) &&
+        attachment.govspeak_content.updated_at > attachment.govspeak_content.created_at)
+    end
+    updated_attachments - created_attachments
+  end
+
+  def has_created_attachments?
+    created_attachments.any?
+  end
+
+  def has_updated_attachments?
+    updated_attachments.any?
+  end
+
+  def has_deleted_attachments?
+    deleted_attachments.any?
   end
 
   def uploaded_to_asset_manager?
