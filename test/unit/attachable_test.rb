@@ -350,34 +350,6 @@ class AttachableTest < ActiveSupport::TestCase
     assert_empty publication.deleted_attachments
   end
 
-  test "#has_deleted_attachments? true" do
-    publication = create(
-      :draft_publication,
-      :with_file_attachment,
-      attachments: [
-        build(:html_attachment),
-        build(:file_attachment),
-      ],
-    )
-
-    publication.delete_all_attachments
-
-    assert_equal true, publication.has_deleted_attachments?
-  end
-
-  test "#has_deleted_attachments? false" do
-    publication = create(
-      :draft_publication,
-      :with_file_attachment,
-      attachments: [
-        build(:html_attachment),
-        build(:file_attachment),
-      ],
-    )
-
-    assert_equal false, publication.has_deleted_attachments?
-  end
-
   test "#created attachments" do
     publication = create(:draft_publication)
 
@@ -387,21 +359,6 @@ class AttachableTest < ActiveSupport::TestCase
     assert_equal [attachment1, attachment2], publication.created_attachments
   end
 
-  test "#has_created_attachments?" do
-    publication = create(:draft_publication)
-
-    publication = create(
-      :draft_publication,
-      :with_file_attachment,
-      attachments: [
-        build(:html_attachment, created_at: publication.created_at + 10.seconds),
-        build(:file_attachment, created_at: publication.created_at + 10.seconds),
-      ],
-    )
-
-    assert_equal true, publication.has_created_attachments?
-  end
-
   test "#updated_attachments" do
     publication = create(:draft_publication)
 
@@ -409,21 +366,6 @@ class AttachableTest < ActiveSupport::TestCase
     publication.attachments << attachment2 = build(:html_attachment, updated_at: publication.created_at + 10.seconds)
 
     assert_equal [attachment1, attachment2], publication.updated_attachments
-  end
-
-  test "#has_updated_attachments?" do
-    publication = create(:draft_publication)
-
-    publication = create(
-      :draft_publication,
-      :with_file_attachment,
-      attachments: [
-        build(:html_attachment, updated_at: publication.created_at + 10.seconds),
-        build(:file_attachment, updated_at: publication.created_at + 10.seconds),
-      ],
-    )
-
-    assert_equal true, publication.has_updated_attachments?
   end
 
   test "#attachables returns array including itself" do

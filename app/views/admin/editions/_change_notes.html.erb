@@ -6,18 +6,18 @@
     <div class="alert alert-info">
       <h4> Attachments you've added, changed or deleted </h4>
       <ul class="govuk-list">
-      <% if edition.has_created_attachments? %>
+      <% if edition.created_attachments.any? %>
         <% edition.created_attachments.each do |attachment| %>
           <li><%= "#{attachment.title} - #{attachment.readable_type} attachment" %> <span class="label label-success">Created</span></li>
         <% end %>
       <% end %>
-      <% if edition.has_updated_attachments? %>
+      <% if edition.updated_attachments.any? %>
         <% edition.updated_attachments.each do |attachment| %>
           <li><%= "#{attachment.title} - #{attachment.readable_type} attachment" %> <span class="label label-warning">Updated</span></li>
         <% end %>
       <% end %>
 
-      <% if edition.has_deleted_attachments? %>
+      <% if edition.deleted_attachments.any? %>
         <% edition.deleted_attachments.each do |attachment| %>
           <li><%= "#{attachment.title} - #{attachment.readable_type} attachment" %> <span class="label label-danger">Deleted</span></li>
         <% end %>

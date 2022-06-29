@@ -67,11 +67,11 @@ module Attachable
   end
 
   def has_attachment_changes?
-    has_created_attachments? || has_updated_attachments? || has_deleted_attachments?
+    created_attachments.any? || updated_attachments.any? || deleted_attachments.any?
   end
 
   def created_attachments
-    attachments.select { |attachment| attachment.created_at > (created_at + 5.seconds) }
+    attachments.where("created_at > ?", created_at + 5.seconds)
   end
 
   def updated_attachments
@@ -81,18 +81,6 @@ module Attachable
         attachment.govspeak_content.updated_at > attachment.govspeak_content.created_at)
     end
     updated_attachments - created_attachments
-  end
-
-  def has_created_attachments?
-    created_attachments.any?
-  end
-
-  def has_updated_attachments?
-    updated_attachments.any?
-  end
-
-  def has_deleted_attachments?
-    deleted_attachments.any?
   end
 
   def uploaded_to_asset_manager?
