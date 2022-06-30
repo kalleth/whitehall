@@ -75,11 +75,9 @@ module Attachable
   end
 
   def updated_attachments
-    updated_attachments = attachments.select do |attachment|
-      attachment.updated_at > attachment.created_at ||
-        (attachment.respond_to?(:govspeak_content) &&
-        attachment.govspeak_content.updated_at > attachment.govspeak_content.created_at)
-    end
+    updated_attachments = attachments.where("updated_at > ?", created_at) ||
+      attachments.join(:govspeak_content).where("govspeak_content.updated_at > ?", govspeak_content.created_at)
+
     updated_attachments - created_attachments
   end
 
