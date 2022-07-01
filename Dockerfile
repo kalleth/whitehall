@@ -1,5 +1,5 @@
 ARG ruby_version=3.0.4
-ARG base_image=ruby:$ruby_version-slim-bullseye
+ARG base_image=ruby:$ruby_version
 ARG gem_home=/usr/local/bundle
 
 FROM $base_image AS builder
@@ -90,7 +90,4 @@ COPY --from=builder /usr/share/nodejs/ /usr/share/nodejs/
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 COPY --from=builder /app ./
 
-RUN groupadd -g 1001 app && \
-    useradd -u 1001 -g app app
-USER 1001
 CMD ["bundle", "exec", "puma"]
