@@ -17,19 +17,6 @@ class Admin::EditionTagsController < Admin::BaseController
       previous_version: params["taxonomy_tag_form"]["previous_version"],
     )
 
-    # Only automatically add legacy associations if this is new
-    # content, to avoid repeatedly adding legacy associations if
-    # they've been manually removed
-    unless @edition.published?
-      legacy_associations_changed = TaxonsToLegacyAssociationsTagging.new.call(
-        edition: @edition,
-        user: current_user,
-        selected_taxons: selected_taxons,
-      )
-
-      flash[:legacy_associations_changed] = legacy_associations_changed
-    end
-
     redirect_to redirect_path,
                 notice: "The tags have been updated."
   rescue GdsApi::HTTPConflict
@@ -40,11 +27,7 @@ class Admin::EditionTagsController < Admin::BaseController
 private
 
   def redirect_path
-    if params[:save]
-      admin_edition_path(@edition)
-    else
-      edit_admin_edition_legacy_associations_path(@edition, return: :tags)
-    end
+    admin_edition_path(@edition) if params[:save]
   end
 
   def enforce_permissions!
