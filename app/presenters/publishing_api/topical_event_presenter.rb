@@ -17,7 +17,7 @@ module PublishingApi
       ).base_attributes
 
       content.merge!(
-        description: nil,
+        description: item.summary,
         details: details,
         document_type: item.class.name.underscore,
         public_updated_at: item.updated_at,
@@ -35,11 +35,26 @@ module PublishingApi
 
     def details
       {}.tap do |details|
+        details[:about_page_link_text] = item.about_page.read_more_link_text if item.about_page && item.about_page.read_more_link_text
+        details[:body] = body
+        details[:emphasised_organisations] = item.lead_organisations.map(&:content_id)
+        details[:image] = image if item.logo_url
         details[:start_date] = item.start_date.rfc3339 if item.start_date
         details[:end_date] = item.end_date.rfc3339 if item.end_date
         details[:ordered_featured_documents] = ordered_featured_documents
         details[:social_media_links] = social_media_links
       end
+    end
+
+    def body
+      Whitehall::GovspeakRenderer.new.govspeak_to_html(item.description)
+    end
+
+    def image
+      {
+        url: item.logo_url(:s300),
+        alt_text: item.logo_alt_text,
+      }
     end
 
     def ordered_featured_documents
