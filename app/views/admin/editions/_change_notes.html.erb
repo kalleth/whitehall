@@ -28,7 +28,12 @@
   </div>
   <div class="js-change-notes-section">
     <div class="form-group">
-      <%= form.text_area(:change_note, rows: 4, label_text: "Describe the change for users", class: 'form-control') %>
+        <%= form.label :change_note do %>
+          Describe the change for users
+          <p class="hint"; style="font-weight: normal">Tell users what has changed, where and why. Write in full sentences, leading with the most important words. For example, "College A has been removed from the registered sponsors list because its licence has been suspended." <br>Read the <a href="https://www.gov.uk/guidance/content-design/writing-for-gov-uk#change-notes" target="_blank">guidance about change notes (opens in a new tab)</a>.</p>
+          <!-- FIXME: This adds an extra label saying change note to the textarea which needs to be removed -->
+          <%= form.text_area(:change_note, rows: 4) %>
+        <% end %>
     </div>
   </div>
   <div class="radio">

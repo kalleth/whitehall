@@ -26,14 +26,14 @@
       var $changeNotesSection = $('.js-change-notes-section', $fieldset)
 
       $radioButtons.change(showOrHideChangeNotes)
-      appendHintToFormLabel()
+      // appendHintToFormLabel()
       showOrHideChangeNotes()
 
-      function appendHintToFormLabel () {
-        var $label = $($changeNotesSection).find('label')
-        var exampleText = 'Tell users what has changed, where and why. Write in full sentences, leading with the most important words. For example, "College A has been removed from the registered sponsors list because its licence has been suspended." <br> Read the <a href="https://www.gov.uk/guidance/content-design/writing-for-gov-uk#change-notes" target="_blank">guidance about change notes (opens in a new tab)</a>.'
-        $label.append('<p class="hint"; style="font-weight: normal">' + exampleText + '</p>')
-      }
+      // function appendHintToFormLabel () {
+      //   var $label = $($changeNotesSection).find('label')
+      //   var exampleText = 'Tell users what has changed, where and why. Write in full sentences, leading with the most important words. For example, "College A has been removed from the registered sponsors list because its licence has been suspended." <br> Read the <a href="https://www.gov.uk/guidance/content-design/writing-for-gov-uk#change-notes" target="_blank">guidance about change notes (opens in a new tab)</a>.'
+      //   $label.append('<p class="hint"; style="font-weight: normal">' + exampleText + '</p>')
+      // }
 
       function showOrHideChangeNotes () {
         if ($minorChangeRadioButton.prop('checked')) {
