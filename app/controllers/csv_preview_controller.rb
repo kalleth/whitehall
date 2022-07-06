@@ -5,10 +5,16 @@ class CsvPreviewController < ApplicationController
     respond_to do |format|
       format.html do
         @csv_response = CsvFileFromPublicHost.csv_response(attachment_data.file.asset_manager_path)
-        if attachment_data.csv? && attachment_visible? && visible_edition
+
+        if attachment_data.csv? && attachment_visible? && attachment.attachable.draft?
+          expires_headers
+          @edition = attachment.attachable
+          @csv_preview = CsvFileFromPublicHost.csv_preview_from(@csv_response)
+          @page_base_href = Plek.new.website_root
+          render layout: "draft_html_attachments"
+        elsif attachment_data.csv? && attachment_visible? && visible_edition
           expires_headers
           @edition = visible_edition
-          @attachment = attachment_data.visible_attachment_for(current_user)
           @csv_preview = CsvFileFromPublicHost.csv_preview_from(@csv_response)
           @page_base_href = Plek.new.website_root
           render layout: "html_attachments"
@@ -56,7 +62,11 @@ private
   end
 
   def attachment_data
-    @attachment_data ||= AttachmentData.find(params[:id])
+    @attachment_data ||= attachment.attachment_data
+  end
+
+  def attachment
+    @attachment ||= Attachment.find(params[:id])
   end
 
   def expires_headers

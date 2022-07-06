@@ -6,17 +6,16 @@ class CsvPreviewControllerTest < ActionController::TestCase
   setup do
     @file = File.open(fixture_path.join("sample.csv"))
     @attachment_data = create(:attachment_data, file: file)
+    @organisation1 = create(:organisation)
+    @organisation2 = create(:organisation)
+    @edition = create(:publication, :published, organisations: [organisation1, organisation2])
+    @attachment = create(:file_attachment, attachment_data: attachment_data, attachable: edition)
 
     @params = {
-      id: attachment_data,
+      id: attachment.id,
       file: attachment_data.filename_without_extension,
       extension: attachment_data.file_extension,
     }
-
-    @organisation1 = create(:organisation)
-    @organisation2 = create(:organisation)
-    @edition = create(:publication, organisations: [organisation1, organisation2])
-    @attachment = build(:file_attachment)
 
     controller.stubs(:attachment_data).returns(attachment_data)
   end
@@ -456,6 +455,27 @@ class CsvPreviewControllerTest < ActionController::TestCase
     get :show, params: params
 
     assert_select ".govuk-body:last-child", text: /This file could not be previewed/
+  end
+
+  # draft edition
+
+  test "responds with 200, assigns the correct variables and renders the draft_html_attachments template" do
+    draft_edition = create(:publication, organisations: [organisation1, organisation2])
+    draft_attachment = create(:file_attachment, attachment_data: attachment_data, attachable: draft_edition)
+    setup_stubs(accessible?: true)
+
+    params = {
+      id: draft_attachment.id,
+      file: attachment_data.filename_without_extension,
+      extension: attachment_data.file_extension,
+    }
+
+    get :show, params: params
+
+    assert_response :ok
+    assert_equal draft_edition, assigns(:edition)
+    assert_equal draft_attachment, assigns(:attachment)
+    assert_template "show", layout: "draft_html_attachments"
   end
 
 private

@@ -17,7 +17,7 @@ When(/^I preview the contents of the attachment$/) do
     .to_return(status: 206, body: File.read(fn))
 
   visit csv_preview_path(
-    id: @attachment.attachment_data.id,
+    id: @attachment.id,
     file: @attachment.filename_without_extension,
     extension: @attachment.file_extension,
   )
